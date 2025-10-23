@@ -17,7 +17,7 @@ Environment="CUDA_HOME=/usr/local/cuda-12.6"
 # Optional: Set API key (uncomment and set your key)
 # Environment="LLM_API_KEY=your-secret-key-here"
 
-ExecStart=ExecStart=/home/rsandham/projects/wsl2-llm/venv311/bin/python3 scripts/start_server_enhanced.py
+ExecStart=/home/rsandham/projects/wsl2-llm/venv311/bin/python3 scripts/start_server_enhanced.py
 
 Restart=always
 RestartSec=10

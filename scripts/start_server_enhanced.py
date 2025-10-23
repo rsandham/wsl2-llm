@@ -458,7 +458,7 @@ async def web_ui():
                 <div class="input-group">
                     <label>Prompt:</label>
                     <textarea id="gen-prompt" placeholder="Enter your prompt here...">def fibonacci(n):
-    """Calculate fibonacci number"""</textarea>
+    &quot;&quot;&quot;Calculate fibonacci number&quot;&quot;&quot;</textarea>
                 </div>
                 <div class="params">
                     <div class="input-group">
@@ -484,7 +484,7 @@ async def web_ui():
                 <div class="input-group">
                     <label>Code to Complete:</label>
                     <textarea id="code-input" placeholder="Enter code to complete...">def quicksort(arr):
-    """Sort array using quicksort"""</textarea>
+    &quot;&quot;&quot;Sort array using quicksort&quot;&quot;&quot;</textarea>
                 </div>
                 <div class="params">
                     <div class="input-group">
