@@ -296,17 +296,33 @@ wsl2-llm/
 ├── config/
 │   └── model_config.yaml          # Server configuration
 ├── models/
-│   └── codellama-13b-instruct.Q4_K_M.gguf
+│   └── codellama-13b-instruct.Q4_K_M.gguf  # GGUF model
 ├── scripts/
 │   ├── start_server_enhanced.py   # Main production server
 │   ├── start_server_llamacpp.py   # Simple server (legacy)
 │   └── download_model.py          # Model downloader
+├── static/                        # Web UI assets
+│   ├── index.html                 # Main HTML page
+│   ├── css/
+│   │   └── style.css              # Stylesheet
+│   └── js/
+│       └── app.js                 # Client-side logic
 ├── llm-server.service             # SystemD service file
 ├── install_service.sh             # Service installer
 ├── test_server_enhanced.sh        # Comprehensive tests
 ├── requirements.txt               # Python dependencies
-└── README.md                      # This file
+└── README.md                      # Documentation
 ```
+
+## 🎨 Frontend Architecture
+
+The web UI follows modern best practices:
+
+- **Separation of Concerns**: HTML, CSS, and JavaScript in separate files
+- **Component-Based CSS**: Organized by component type
+- **Modern JavaScript**: ES6+ with async/await
+- **No Dependencies**: Pure vanilla JS, no frameworks needed
+- **Responsive Design**: Works on desktop and tablet devices
 
 ## 🤝 Contributing
 
