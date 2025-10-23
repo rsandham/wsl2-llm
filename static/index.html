@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Inference UI</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 LLM Inference Server</h1>
+        <p class="subtitle">GPU-Accelerated CodeLlama-13B</p>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('generate', this)">Generate</button>
+            <button class="tab" onclick="switchTab('complete', this)">Complete Code</button>
+            <button class="tab" onclick="switchTab('chat', this)">Chat</button>
+            <button class="tab" onclick="switchTab('batch', this)">Batch</button>
+        </div>
+        
+        <!-- Generate Tab -->
+        <div id="generate" class="tab-content active">
+            <div class="input-group">
+                <label>Prompt:</label>
+                <textarea id="gen-prompt" placeholder="Enter your prompt here...">def fibonacci(n):
+    &quot;&quot;&quot;Calculate fibonacci number&quot;&quot;&quot;</textarea>
+            </div>
+            <div class="params">
+                <div class="input-group">
+                    <label>Max Tokens:</label>
+                    <input type="number" id="gen-tokens" value="512" min="1" max="2048">
+                </div>
+                <div class="input-group">
+                    <label>Temperature:</label>
+                    <input type="number" id="gen-temp" value="0.7" step="0.1" min="0" max="2">
+                </div>
+                <div class="input-group">
+                    <label>API Key (optional):</label>
+                    <input type="text" id="api-key" placeholder="Enter API key if required">
+                </div>
+            </div>
+            <button onclick="generate()">Generate</button>
+            <div id="gen-output" class="output"></div>
+            <div id="gen-stats" class="stats"></div>
+        </div>
+        
+        <!-- Complete Tab -->
+        <div id="complete" class="tab-content">
+            <div class="input-group">
+                <label>Code to Complete:</label>
+                <textarea id="code-input" placeholder="Enter code to complete...">def quicksort(arr):
+    &quot;&quot;&quot;Sort array using quicksort&quot;&quot;&quot;</textarea>
+            </div>
+            <div class="params">
+                <div class="input-group">
+                    <label>Max Tokens:</label>
+                    <input type="number" id="complete-tokens" value="150" min="1" max="1000">
+                </div>
+                <div class="input-group">
+                    <label>Temperature:</label>
+                    <input type="number" id="complete-temp" value="0.3" step="0.1" min="0" max="1">
+                </div>
+            </div>
+            <button onclick="complete()">Complete Code</button>
+            <div id="complete-output" class="output"></div>
+        </div>
+        
+        <!-- Chat Tab -->
+        <div id="chat" class="tab-content">
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="input-group">
+                <label>Your Message:</label>
+                <textarea id="chat-input" placeholder="Type your message..." rows="3"></textarea>
+            </div>
+            <button onclick="sendChat()">Send Message</button>
+        </div>
+        
+        <!-- Batch Tab -->
+        <div id="batch" class="tab-content">
+            <div class="input-group">
+                <label>Prompts (one per line):</label>
+                <textarea id="batch-prompts" placeholder="Enter multiple prompts, one per line...">def hello_world():
+def fibonacci(n):
+class Calculator:</textarea>
+            </div>
+            <div class="params">
+                <div class="input-group">
+                    <label>Max Tokens per Prompt:</label>
+                    <input type="number" id="batch-tokens" value="200" min="1" max="1000">
+                </div>
+            </div>
+            <button onclick="batchProcess()">Process Batch</button>
+            <div id="batch-output" class="output"></div>
+        </div>
+    </div>
+    
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
