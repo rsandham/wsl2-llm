@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments
+venv/
+venv311/
+.venv/
+
+# Model artifacts / large binary files
+models/
+offload/
+*.safetensors
+*.ckpt
+
+# Huggingface cache
+~/.cache/huggingface/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+
+# Logs and runtime
+*.log
+server.pid
+

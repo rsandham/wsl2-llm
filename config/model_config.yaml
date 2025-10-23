@@ -1,0 +1,20 @@
+model:
+  name: "codellama/CodeLlama-13b-instruct-hf"   # correct repository name with -hf suffix
+  path: "./models"
+  quantization: "4bit"
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  max_batch_size: 8
+  max_input_length: 4096
+  max_new_tokens: 512
+
+optimization:
+  offload_folder: "./offload"
+  # per-device max memory estimates (adjust if needed)
+  max_memory:
+    cuda:0: "11000MB"
+    cuda:1: "11000MB"
+    cuda:2: "11000MB"
+    cpu:   "470000MB"
