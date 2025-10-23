@@ -5,7 +5,6 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 import uvicorn
 from pydantic import BaseModel
-from huggingface_hub import hf_hub_download
 
 app = FastAPI()
 
@@ -19,11 +18,11 @@ def load_config():
         return yaml.safe_load(f)
 
 def load_model():
-    config = load_config()  # your existing loader
+    config = load_config()
     model_name = config["model"]["name"]
     hf_token = os.environ.get("HF_TOKEN")
 
-    tokenizer = AutoTokenizer.from_pretrained(model_name, use_auth_token=hf_token)
+    tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
 
     max_memory = config.get("optimization", {}).get("max_memory", {
         "cuda:0": "11000MB",
@@ -32,32 +31,26 @@ def load_model():
         "cpu":    "470000MB",
     })
 
-    # For stable start: use 8-bit first (bitsandbytes), then experiment with 4-bit
-    # For 4-bit you may need specific bitsandbytes settings and recent transformers
+    # Use BitsAndBytesConfig for 8-bit quantization (proper method)
+    bnb_config = BitsAndBytesConfig(
+        load_in_8bit=True,
+        bnb_8bit_compute_dtype=torch.float16,
+    )
+
+    print(f"Loading model {model_name} with 8-bit quantization...")
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         device_map="auto",
         max_memory=max_memory,
         offload_folder=config.get("optimization", {}).get("offload_folder", "./offload"),
-        load_in_8bit=True,            # start with 8-bit; switch to 4-bit if you set up flags
+        quantization_config=bnb_config,
         torch_dtype=torch.float16,
         low_cpu_mem_usage=True,
-        use_auth_token=hf_token,
+        token=hf_token,
     )
-
-    # For 4-bit via bitsandbytes (optional, more advanced):
-    # model = AutoModelForCausalLM.from_pretrained(
-    #     model_name,
-    #     device_map="auto",
-    #     max_memory=max_memory,
-    #     offload_folder="./offload",
-    #     load_in_4bit=True,
-    #     bnb_4bit_use_double_quant=True,
-    #     bnb_4bit_quant_type='nf4',
-    #     torch_dtype=torch.float16,
-    #     low_cpu_mem_usage=True,
-    #     use_auth_token=hf_token,
-    # )
+    
+    print("Model loaded successfully!")
+    print(f"Device map: {model.hf_device_map}")
     return model, tokenizer
 
 model, tokenizer = load_model()
@@ -65,6 +58,8 @@ model, tokenizer = load_model()
 @app.post("/generate")
 async def generate_text(request: InferenceRequest):
     inputs = tokenizer(request.prompt, return_tensors="pt")
+    # Move inputs to the model's device
+    inputs = {k: v.to(model.device) for k, v in inputs.items()}
     
     outputs = model.generate(
         inputs["input_ids"],
