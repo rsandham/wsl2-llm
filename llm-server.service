@@ -1,0 +1,30 @@
+[Unit]
+Description=LLM Inference Server with GPU Acceleration
+After=network.target
+
+[Service]
+Type=simple
+User=rsandham
+Group=rsandham
+WorkingDirectory=/home/rsandham/projects/wsl2-llm
+
+# CUDA environment variables
+Environment="PATH=/usr/local/cuda-12.6/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment="LD_LIBRARY_PATH=/usr/local/cuda-12.6/lib64"
+Environment="CUDACXX=/usr/local/cuda-12.6/bin/nvcc"
+Environment="CUDA_HOME=/usr/local/cuda-12.6"
+
+# Optional: Set API key (uncomment and set your key)
+# Environment="LLM_API_KEY=your-secret-key-here"
+
+ExecStart=ExecStart=/home/rsandham/projects/wsl2-llm/venv311/bin/python3 scripts/start_server_enhanced.py
+
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=append:/var/log/llm-server.log
+StandardError=append:/var/log/llm-server-error.log
+
+[Install]
+WantedBy=multi-user.target
